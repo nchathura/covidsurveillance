@@ -31,14 +31,14 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <Text layoutX="45.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MM-DD-YYYY" />
-      <Text layoutX="219.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-      <Text layoutX="382.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-      <Text layoutX="516.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-      <JFXDatePicker layoutX="160.0" layoutY="155.0" prefHeight="24.0" prefWidth="280.0" promptText="MM-DD-YYYY" />
-      <JFXTextField labelFloat="true" layoutX="160.0" layoutY="200.0" prefHeight="26.0" prefWidth="280.0" promptText="Enter the number of confirmed cases" />
-      <JFXTextField labelFloat="true" layoutX="160.0" layoutY="245.0" prefHeight="26.0" prefWidth="280.0" promptText="Enter the number of recovered cases" />
-      <JFXTextField labelFloat="true" layoutX="160.0" layoutY="290.0" prefHeight="26.0" prefWidth="280.0" promptText="Enter the number of deaths" />
-      <JFXButton layoutX="263.0" layoutY="345.0" prefHeight="26.0" prefWidth="74.0" style="-fx-border-color: black;" text="Update" />
+      <Text fx:id="lblLastUpdated" layoutX="45.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MM-DD-YYYY" />
+      <Text fx:id="lblConfirmedCases" fill="#3700ff" layoutX="219.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="lblRecoveredCases" fill="#0ce846" layoutX="382.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="lblDeathsCases" fill="RED" layoutX="516.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <JFXDatePicker fx:id="txtDate" layoutX="160.0" layoutY="155.0" prefHeight="24.0" prefWidth="280.0" promptText="MM-DD-YYYY" />
+      <JFXTextField fx:id="txtConfirmed" labelFloat="true" layoutX="160.0" layoutY="212.0" prefHeight="26.0" prefWidth="280.0" promptText="Enter the number of confirmed cases" />
+      <JFXTextField fx:id="txtRecovered" labelFloat="true" layoutX="160.0" layoutY="258.0" prefHeight="26.0" prefWidth="280.0" promptText="Enter the number of recovered cases" />
+      <JFXTextField fx:id="txtDeaths" labelFloat="true" layoutX="160.0" layoutY="302.0" prefHeight="26.0" prefWidth="280.0" promptText="Enter the number of deaths" />
+      <JFXButton layoutX="263.0" layoutY="345.0" onAction="#btnUpdate" prefHeight="26.0" prefWidth="74.0" style="-fx-border-color: black;" text="Update" />
    </children>
 </AnchorPane>

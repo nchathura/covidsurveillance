@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageHospitalController">
    <children>
-      <JFXButton layoutX="14.0" layoutY="12.0" onAction="#btnHome_OnAction" text="Home" />
+      <JFXButton layoutX="22.0" layoutY="13.0" onAction="#btnHome_OnAction" style="-fx-border-color: black;" text="Home" />
       <Text layoutX="252.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manage Hospitals" />
+      <JFXTextField labelFloat="true" layoutX="22.0" layoutY="54.0" prefHeight="26.0" prefWidth="146.0" promptText="Search Hospital" />
+      <JFXListView layoutX="22.0" layoutY="82.0" prefHeight="278.0" prefWidth="146.0" />
+      <JFXButton onAction="#btnAddHospital_OnAction" layoutX="22.0" layoutY="360.0" prefHeight="32.0" prefWidth="146.0" style="-fx-border-color: black;" text="+ Add Hospital" />
+      <TitledPane animated="false" layoutX="179.0" layoutY="54.0" prefHeight="338.0" prefWidth="410.0" text="Hospital Information">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="301.0" prefWidth="406.0">
+               <children>
+                  <JFXTextField fx:id="txtId" labelFloat="true" layoutX="14.0" layoutY="14.0" prefHeight="24.0" prefWidth="173.0" promptText="ID" />
+                  <JFXTextField labelFloat="true" layoutX="206.0" layoutY="14.0" prefHeight="24.0" prefWidth="190.0" promptText="Hospital Name" />
+                  <JFXTextField labelFloat="true" layoutX="207.0" layoutY="67.0" prefHeight="24.0" prefWidth="189.0" promptText="City" />
+                  <JFXComboBox labelFloat="true" layoutX="17.0" layoutY="68.0" prefHeight="22.0" prefWidth="174.0" promptText="District" />
+                  <JFXTextField labelFloat="true" layoutX="17.0" layoutY="114.0" prefHeight="24.0" prefWidth="174.0" promptText="Capacity" />
+                  <JFXTextField labelFloat="true" layoutX="207.0" layoutY="114.0" prefHeight="24.0" prefWidth="190.0" promptText="Director" />
+                  <JFXTextField labelFloat="true" layoutX="17.0" layoutY="170.0" prefHeight="24.0" prefWidth="174.0" promptText="Director Contact No" />
+                  <JFXTextField labelFloat="true" layoutX="207.0" layoutY="170.0" prefHeight="24.0" prefWidth="190.0" promptText="Hospital Contact No 1" />
+                  <JFXTextField labelFloat="true" layoutX="17.0" layoutY="222.0" prefHeight="24.0" prefWidth="174.0" promptText="Hospital Contact No 2" />
+                  <JFXTextField labelFloat="true" layoutX="207.0" layoutY="222.0" prefHeight="24.0" prefWidth="190.0" promptText="Hospital FAX No" />
+                  <JFXTextField labelFloat="true" layoutX="17.0" layoutY="267.0" prefHeight="24.0" prefWidth="174.0" promptText="Hospital E-mail" />
+                  <JFXButton layoutX="207.0" layoutY="266.0" prefHeight="26.0" prefWidth="84.0" style="-fx-border-color: black;" text="Save" />
+                  <JFXButton layoutX="313.0" layoutY="266.0" prefHeight="26.0" prefWidth="84.0" style="-fx-border-color: black;" text="Delete" />
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
+
    </children>
 </AnchorPane>
