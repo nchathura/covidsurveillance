@@ -98,6 +98,7 @@ public class ManageHospitalController {
     public void btnSave_OnAction(ActionEvent actionEvent) {
         validatePhoneNo();
         validateEmail();
+        validateCapacity();
     }
 
     //Validating Inputs
@@ -106,7 +107,7 @@ public class ManageHospitalController {
         String contact1 = txtHospitalContact1.getText().trim();
         String contact2 = txtHospitalContact2.getText().trim();
         String directorContact = txtDirectorContact.getText().trim();
-        Alert myAlert = new Alert(Alert.AlertType.ERROR, "One or more contact numbers are wrong!\n Enter a correct contact no as below \n (077-1234567)");
+        Alert myAlert = new Alert(Alert.AlertType.ERROR, "One or more contact numbers are wrong/ empty!\n Enter a correct contact no as below \n (077-1234567)");
         boolean flag = contact1.matches(numberFormat);
         boolean flag3 = directorContact.matches(numberFormat);
 
@@ -124,8 +125,6 @@ public class ManageHospitalController {
              myAlert.show();
             }
         }
-
-
     }
 
     public void validateEmail () {
@@ -138,6 +137,18 @@ public class ManageHospitalController {
                 new Alert(Alert.AlertType.ERROR, "Wrong E-mail address \n Try again!").show();
         }
     }
+
+    //Validate Capacity Text
+    public void validateCapacity (){
+        String isNumber= "^[0-9]*$";
+        String capacity = txtCapacity.getText().trim();
+        boolean matches = capacity.matches(isNumber);
+
+        if (!matches || capacity.equals("")){
+            new Alert(Alert.AlertType.ERROR, "Wrong capacity, try again").show();
+        }
+    }
+
     public void btnDelete_OnAction(ActionEvent actionEvent) {
     }
 }
