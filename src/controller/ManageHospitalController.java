@@ -1,5 +1,6 @@
 package controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
@@ -42,6 +43,9 @@ public class ManageHospitalController {
     public JFXTextField txtSearchHospital;
     public ArrayList<String> hosList = new ArrayList<>();
     public String newClicked;
+    public JFXButton btnSave;
+    public JFXButton btnDelete;
+    public JFXButton btnAddHost;
 
     public void initialize (){
 
@@ -82,6 +86,21 @@ public class ManageHospitalController {
         String[] districts = districtsText.split("\n");
         ObservableList<String> olDistricts = FXCollections.observableArrayList(Arrays.asList(districts));
         cmbDistricts.setItems(olDistricts);
+
+        //Disable/Unable Fields
+        txtId.setDisable(true);
+        txtEmail.setDisable(true);
+        txtFax.setDisable(true);
+        txtHospitalContact1.setDisable(true);
+        txtHospitalContact2.setDisable(true);
+        txtDirectorContact.setDisable(true);
+        txtDirector.setDisable(true);
+        txtCity.setDisable(true);
+        txtCapacity.setDisable(true);
+        txtHospitalName.setDisable(true);
+        cmbDistricts.setDisable(true);
+        btnSave.setDisable(true);
+        btnDelete.setDisable(true);
     }
 
     //Home Button On Action
@@ -95,9 +114,25 @@ public class ManageHospitalController {
 
     //Get Clicked Item in listView
     public void getClicked(){
+
         lstHospitals.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                //        Unable Fields
+                txtId.setDisable(false);
+                txtEmail.setDisable(false);
+                txtFax.setDisable(false);
+                txtHospitalContact1.setDisable(false);
+                txtHospitalContact2.setDisable(false);
+                txtDirectorContact.setDisable(false);
+                txtDirector.setDisable(false);
+                txtCity.setDisable(false);
+                txtCapacity.setDisable(false);
+                txtHospitalName.setDisable(false);
+                cmbDistricts.setDisable(false);
+                btnSave.setDisable(false);
+                btnDelete.setDisable(false);
+
                 newClicked = newValue;
                 viewHospital();
             }
@@ -224,72 +259,163 @@ public class ManageHospitalController {
     //On Action
     //Hospital Button On Action
     public void btnAddHospital_OnAction(ActionEvent actionEvent) {
-        //Generating an ID
-        String number = txtId.getText().trim();
-        String newNo = number.replace("H", "");
-        int no = Integer.parseInt(newNo);
+        btnSave.setText("Save");
+//        Unable Fields
+        txtId.setDisable(false);
+        txtEmail.setDisable(false);
+        txtFax.setDisable(false);
+        txtHospitalContact1.setDisable(false);
+        txtHospitalContact2.setDisable(false);
+        txtDirectorContact.setDisable(false);
+        txtDirector.setDisable(false);
+        txtCity.setDisable(false);
+        txtCapacity.setDisable(false);
+        txtHospitalName.setDisable(false);
+        cmbDistricts.setDisable(false);
+        btnSave.setDisable(false);
 
-        if (no>=1){
-            String temp = "H00"+(no+1);
-            txtId.setText(temp);
+        //Clear Fields
+        txtEmail.clear();
+        txtFax.clear();
+        txtHospitalContact1.clear();
+        txtHospitalContact2.clear();
+        txtDirectorContact.clear();
+        txtDirector.clear();
+        txtCity.clear();
+        txtCapacity.clear();
+        txtHospitalName.clear();
+
+        //Generating an ID
+        if (txtId.getText().isEmpty()){
+            txtId.setText("H001");
+        }else {
+            try {
+                PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement("SELECT id FROM hospitalinformation");
+                ResultSet resultSet = prStm.executeQuery();
+                while (resultSet.next()) {
+//                    txtId.setText(resultSet.getString(1));
+                    String value = resultSet.getString(1);
+                    txtId.setText(value);
+                    if (!value.isEmpty()){
+                        String number = txtId.getText().trim();
+                        String newNo = number.replace("H", "");
+                        int no = Integer.parseInt(newNo);
+
+                        if (no>=1){
+                            String temp = "H00"+(no+1);
+                            txtId.setText(temp);
+                        }
+                        if (no>=9){
+                            String temp = "H0"+(no+1);
+                            txtId.setText(temp);
+                         }
+                        if (no>=99){
+                            String temp = "H"+(no+1);
+                             txtId.setText(temp);
         }
-        if (no>=9){
-            String temp = "H0"+(no+1);
-            txtId.setText(temp);
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        if (no>=99){
-            String temp = "H"+(no+1);
-            txtId.setText(temp);
-        }
+
+//        String number = txtId.getText().trim();
+//        String newNo = number.replace("H", "");
+//        int no = Integer.parseInt(newNo);
+//
+//        if (no>=1){
+//            String temp = "H00"+(no+1);
+//            txtId.setText(temp);
+//        }
+//        if (no>=9){
+//            String temp = "H0"+(no+1);
+//            txtId.setText(temp);
+//        }
+//        if (no>=99){
+//            String temp = "H"+(no+1);
+//            txtId.setText(temp);
+//        }
     }
 
     //Save Button On Action
     public void btnSave_OnAction(ActionEvent actionEvent) {
-        validatePhoneNo();
-        validateFax();
-        validateEmail();
-        validateCapacity();
+        if (btnSave.getText().equals("Save")) {
+            validatePhoneNo();
+            validateFax();
+            validateEmail();
+            validateCapacity();
 
-        String SQL = "INSERT INTO hospitalInformation VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        try {
-            PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement(SQL);
-            String id = txtId.getText();
-            String name = txtHospitalName.getText();
-            String district = cmbDistricts.getSelectionModel().getSelectedItem();
-            String city = txtCity.getText();
-            String director = txtDirector.getText();
-            String dirContact = txtDirectorContact.getText();
-            String hosContact1 = txtHospitalContact1.getText();
-            String hosContact2 = txtHospitalContact2.getText();
-            String fax = txtFax.getText();
-            String mail = txtEmail.getText();
-            String capacity = txtCapacity.getText();
+            String SQL = "INSERT INTO hospitalInformation VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            try {
+                PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement(SQL);
+                String id = txtId.getText();
+                String name = txtHospitalName.getText();
+                String district = cmbDistricts.getSelectionModel().getSelectedItem();
+                String city = txtCity.getText();
+                String director = txtDirector.getText();
+                String dirContact = txtDirectorContact.getText();
+                String hosContact1 = txtHospitalContact1.getText();
+                String hosContact2 = txtHospitalContact2.getText();
+                String fax = txtFax.getText();
+                String mail = txtEmail.getText();
+                String capacity = txtCapacity.getText();
 
-            prStm.setObject(1, id);
-            prStm.setObject(2, name);
-            prStm.setObject(3, city);
-            prStm.setObject(4, district);
-            prStm.setObject(5, Integer.parseInt(capacity));
-            prStm.setObject(6, director);
-            prStm.setObject(7, dirContact);
-            prStm.setObject(8, hosContact1);
-            prStm.setObject(9, hosContact2);
-            prStm.setObject(10,fax);
-            prStm.setObject(11, mail);
+                prStm.setObject(1, id);
+                prStm.setObject(2, name);
+                prStm.setObject(3, city);
+                prStm.setObject(4, district);
+                prStm.setObject(5, Integer.parseInt(capacity));
+                prStm.setObject(6, director);
+                prStm.setObject(7, dirContact);
+                prStm.setObject(8, hosContact1);
+                prStm.setObject(9, hosContact2);
+                prStm.setObject(10, fax);
+                prStm.setObject(11, mail);
 
-            int i = prStm.executeUpdate();
-            if (i>0){
-                new Alert(Alert.AlertType.CONFIRMATION, "Successfully Saved", ButtonType.OK).show();
+                int i = prStm.executeUpdate();
+                if (i > 0) {
+                    new Alert(Alert.AlertType.CONFIRMATION, "Successfully Saved", ButtonType.OK).show();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                new Alert(Alert.AlertType.ERROR, "Something went wrong, try again", ButtonType.OK).show();
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Something went wrong, try again", ButtonType.OK).show();
+            //Clear Fields
+            txtEmail.clear();
+            txtFax.clear();
+            txtHospitalContact1.clear();
+            txtHospitalContact2.clear();
+            txtDirectorContact.clear();
+            txtDirector.clear();
+            txtCity.clear();
+            txtCapacity.clear();
+            txtHospitalName.clear();
+
+            //Disable/Unable Fields
+            txtId.setDisable(true);
+            txtEmail.setDisable(true);
+            txtFax.setDisable(true);
+            txtHospitalContact1.setDisable(true);
+            txtHospitalContact2.setDisable(true);
+            txtDirectorContact.setDisable(true);
+            txtDirector.setDisable(true);
+            txtCity.setDisable(true);
+            txtCapacity.setDisable(true);
+            txtHospitalName.setDisable(true);
+            cmbDistricts.setDisable(true);
+            btnSave.setDisable(true);
         }
+        updateHospital();
     }
 
     //View Hospital Info
     public void viewHospital(){
+        btnSave.setText("Update");
+
         String SQL = "SELECT * FROM hospitalInformation WHERE HospitalName=?";
         try {
             PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement(SQL);
@@ -330,8 +456,49 @@ public class ManageHospitalController {
         }
     }
 
+    //Update Hospital
+    public void updateHospital (){
+        if (btnSave.getText().equals("Update")){
+            try {
+                PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement
+                        ("UPDATE hospitalinformation SET hospitalName=?, city=?, district=?, capacity=?, director=?, directorContact=?, hospitalContact2=?, hospitalContact2=?, hospitalFax=?, hospitalEmail=? WHERE id=?");
+                prStm.setObject(1,txtHospitalName.getText());
+                prStm.setObject(2,txtCity.getText());
+                prStm.setObject(3,cmbDistricts.getSelectionModel().getSelectedItem());
+                prStm.setObject(4,txtCapacity.getText());
+                prStm.setObject(5,txtDirector.getText());
+                prStm.setObject(6,txtDirectorContact.getText());
+                prStm.setObject(7,txtHospitalContact1.getText());
+                prStm.setObject(8,txtHospitalContact2.getText());
+                prStm.setObject(9,txtFax.getText());
+                prStm.setObject(10,txtEmail.getText());
+                prStm.setString(11,txtId.getText());
+                System.out.println(txtId.getText());
+                int i = prStm.executeUpdate();
+                if (i>0){
+                    new Alert(Alert.AlertType.CONFIRMATION, "Successfully Updated!", ButtonType.OK).show();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                new Alert(Alert.AlertType.CONFIRMATION, "Oops Something went wrong! Try again.", ButtonType.OK).show();
+            }
+        }
+    }
+
     //Delete Button On Action
     public void btnDelete_OnAction(ActionEvent actionEvent) {
+        try {
+            PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement("DELETE FROM hospitalinformation WHERE id=?");
 
+            prStm.setString(1,txtId.getText());
+            int i = prStm.executeUpdate();
+
+            if (i>0){
+                new Alert(Alert.AlertType.CONFIRMATION, "Successfully Deleted!", ButtonType.OK).show();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.CONFIRMATION, "Oops Something went wrong! Try again.", ButtonType.OK).show();
+        }
     }
 }
