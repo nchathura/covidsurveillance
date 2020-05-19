@@ -12,7 +12,7 @@
    <children>
       <JFXButton layoutX="22.0" layoutY="13.0" onAction="#btnHome_OnAction" style="-fx-border-color: black;" text="Home" />
       <Text layoutX="252.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manage Hospitals" />
-      <JFXTextField labelFloat="true" layoutX="22.0" layoutY="54.0" prefHeight="26.0" prefWidth="146.0" promptText="Search Hospital" />
+      <JFXTextField fx:id="txtSearchHospital" labelFloat="true" layoutX="22.0" layoutY="54.0" prefHeight="26.0" prefWidth="146.0" promptText="Search Hospital" />
       <JFXListView fx:id="lstHospitals" layoutX="22.0" layoutY="82.0" prefHeight="278.0" prefWidth="146.0" />
       <JFXButton layoutX="22.0" layoutY="360.0" onAction="#btnAddHospital_OnAction" prefHeight="32.0" prefWidth="146.0" style="-fx-border-color: black;" text="+ Add Hospital" />
       <TitledPane animated="false" layoutX="179.0" layoutY="54.0" prefHeight="338.0" prefWidth="410.0" text="Hospital Information">

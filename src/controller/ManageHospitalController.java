@@ -3,16 +3,26 @@ package controller;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import db.DBConnection;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ManageHospitalController {
@@ -29,44 +39,52 @@ public class ManageHospitalController {
     public JFXTextField txtHospitalContact2;
     public JFXTextField txtFax;
     public JFXTextField txtEmail;
-
+    public JFXTextField txtSearchHospital;
+    public ArrayList<String> hosList = new ArrayList<>();
+    public String newClicked;
 
     public void initialize (){
-        if (txtId.getText().isEmpty()) {
-            txtId.setText("H001");
-        }
+
+        setId();
+
+        loadHospitals();
+
+        searchHospital();
+
+        getClicked();
 
         String districtsText =
-                " Colombo\n" +
-                " Gampaha\n" +
-                " Kalutara\n" +
-                " Kandy\n" +
-                " Matale\n" +
-                " Nuwara Eliya\n" +
-                " Galle\n" +
-                " Matara\n" +
-                " Hambantota\n" +
-                " Jaffna\n" +
-                " Mannar\n" +
-                " Vauniya\n" +
-                " Mullativue\n" +
-                " Ampara\n" +
-                " Trincomalee\n" +
-                " Batticaloa\n" +
-                " Kilinochchi\n" +
-                " Kurunegala\n" +
-                " Puttalam\n" +
-                " Anuradhapura\n" +
-                " Polonnaruwa\n" +
-                " Badulla\n" +
-                " Moneragala\n" +
-                " Ratnapura\n" +
-                " Kegalle";
+                "Colombo\n" +
+                "Gampaha\n" +
+                "Kalutara\n" +
+                "Kandy\n" +
+                "Matale\n" +
+                "Nuwara Eliya\n" +
+                "Galle\n" +
+                "Matara\n" +
+                "Hambantota\n" +
+                "Jaffna\n" +
+                "Mannar\n" +
+                "Vauniya\n" +
+                "Mullativue\n" +
+                "Ampara\n" +
+                "Trincomalee\n" +
+                "Batticaloa\n" +
+                "Kilinochchi\n" +
+                "Kurunegala\n" +
+                "Puttalam\n" +
+                "Anuradhapura\n" +
+                "Polonnaruwa\n" +
+                "Badulla\n" +
+                "Moneragala\n" +
+                "Ratnapura\n" +
+                "Kegalle";
         String[] districts = districtsText.split("\n");
         ObservableList<String> olDistricts = FXCollections.observableArrayList(Arrays.asList(districts));
         cmbDistricts.setItems(olDistricts);
     }
 
+    //Home Button On Action
     public void btnHome_OnAction(ActionEvent actionEvent) throws IOException {
         Scene dashScene = new Scene(FXMLLoader.load(getClass().getResource("/view/Dashboard.fxml")));
         Stage primaryStage = (Stage) (root.getScene().getWindow());
@@ -75,33 +93,74 @@ public class ManageHospitalController {
         primaryStage.show();
     }
 
-    public void btnAddHospital_OnAction(ActionEvent actionEvent) {
-        //Generating an ID
-        String number = txtId.getText().trim();
-        String newNo = number.replace("H", "");
-        int no = Integer.parseInt(newNo);
-
-        if (no>=1){
-            String temp = "H00"+(no+1);
-            txtId.setText(temp);
-        }
-        if (no>=9){
-            String temp = "H0"+(no+1);
-            txtId.setText(temp);
-        }
-        if (no>=99){
-            String temp = "H"+(no+1);
-            txtId.setText(temp);
-        }
+    //Get Clicked Item in listView
+    public void getClicked(){
+        lstHospitals.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                newClicked = newValue;
+                viewHospital();
+            }
+        });
     }
 
-    public void btnSave_OnAction(ActionEvent actionEvent) {
-        validatePhoneNo();
-        validateEmail();
-        validateCapacity();
+    //Search Hospital
+    public void searchHospital (){
+        txtSearchHospital.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                lstHospitals.getItems().clear();
+                for (String hostName:hosList){
+                    if (hostName.contains(newValue)){
+                        lstHospitals.getItems().add(hostName);
+                        lstHospitals.refresh();
+                    }
+                }
+            }
+        });
+    }
+
+    //Set Hospital ID When Initialize
+    public void setId (){
+//        if (txtId.getText().isEmpty()) {
+//            txtId.setText("H001");
+//        }else if(txtId.getText().equals("H001")){
+            try {
+                PreparedStatement prmStm = DBConnection.getInstance().getConnection().prepareStatement("SELECT id FROM hospitalInformation");
+
+                ResultSet resultSet = prmStm.executeQuery();
+                while (resultSet.next()){
+                    String id = resultSet.getString(1);
+                    System.out.println(id);
+                    txtId.setText(id);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+//        }
+    }
+
+    //Load Hospitals into listView
+    public void loadHospitals(){
+        try {
+            PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement("SELECT hospitalName FROM hospitalInformation");
+            ResultSet resultSet = prStm.executeQuery();
+
+            while (resultSet.next()){
+                String hospital = resultSet.getString(1);
+                hosList.add(hospital);
+                System.out.println(hosList);
+                ObservableList<String> hospitals = FXCollections.observableArrayList(hosList);
+                lstHospitals.setItems(hospitals);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     //Validating Inputs
+    //Validate Phone Numbers
     public void validatePhoneNo (){
         String numberFormat= "^\\d{3}[-]\\d{7}$";
         String contact1 = txtHospitalContact1.getText().trim();
@@ -127,6 +186,19 @@ public class ManageHospitalController {
         }
     }
 
+    //Validate FAX
+    public void validateFax(){
+        String numberFormat= "^\\d{3}[-]\\d{7}$";
+        String faxNo = txtFax.getText().trim();
+        boolean matches = faxNo.matches(numberFormat);
+
+        if (!matches){
+            Alert myAlert = new Alert(Alert.AlertType.ERROR, "Enter a correct FAX no: as below \n (057-2345677)");
+            myAlert.show();
+        }
+    }
+
+    //Validate E-mail
     public void validateEmail () {
             String mailFormat = "^[A-Za-z0-9+_.-]+@(.+)$";
             String mail = txtEmail.getText();
@@ -149,6 +221,117 @@ public class ManageHospitalController {
         }
     }
 
+    //On Action
+    //Hospital Button On Action
+    public void btnAddHospital_OnAction(ActionEvent actionEvent) {
+        //Generating an ID
+        String number = txtId.getText().trim();
+        String newNo = number.replace("H", "");
+        int no = Integer.parseInt(newNo);
+
+        if (no>=1){
+            String temp = "H00"+(no+1);
+            txtId.setText(temp);
+        }
+        if (no>=9){
+            String temp = "H0"+(no+1);
+            txtId.setText(temp);
+        }
+        if (no>=99){
+            String temp = "H"+(no+1);
+            txtId.setText(temp);
+        }
+    }
+
+    //Save Button On Action
+    public void btnSave_OnAction(ActionEvent actionEvent) {
+        validatePhoneNo();
+        validateFax();
+        validateEmail();
+        validateCapacity();
+
+        String SQL = "INSERT INTO hospitalInformation VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        try {
+            PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement(SQL);
+            String id = txtId.getText();
+            String name = txtHospitalName.getText();
+            String district = cmbDistricts.getSelectionModel().getSelectedItem();
+            String city = txtCity.getText();
+            String director = txtDirector.getText();
+            String dirContact = txtDirectorContact.getText();
+            String hosContact1 = txtHospitalContact1.getText();
+            String hosContact2 = txtHospitalContact2.getText();
+            String fax = txtFax.getText();
+            String mail = txtEmail.getText();
+            String capacity = txtCapacity.getText();
+
+            prStm.setObject(1, id);
+            prStm.setObject(2, name);
+            prStm.setObject(3, city);
+            prStm.setObject(4, district);
+            prStm.setObject(5, Integer.parseInt(capacity));
+            prStm.setObject(6, director);
+            prStm.setObject(7, dirContact);
+            prStm.setObject(8, hosContact1);
+            prStm.setObject(9, hosContact2);
+            prStm.setObject(10,fax);
+            prStm.setObject(11, mail);
+
+            int i = prStm.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.CONFIRMATION, "Successfully Saved", ButtonType.OK).show();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Something went wrong, try again", ButtonType.OK).show();
+        }
+    }
+
+    //View Hospital Info
+    public void viewHospital(){
+        String SQL = "SELECT * FROM hospitalInformation WHERE HospitalName=?";
+        try {
+            PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement(SQL);
+            prStm.setObject(1, newClicked);
+            ResultSet resultSet = prStm.executeQuery();
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String name = resultSet.getString(2);
+                String city = resultSet.getString(3);
+                String district = resultSet.getString(4);
+                ObservableList<String> dis = FXCollections.observableArrayList(district);
+                String capacity = resultSet.getString(5);
+                String director = resultSet.getString(6);
+                String dirContact = resultSet.getString(7);
+                String hosContact1 = resultSet.getString(8);
+                String hosContact2 = resultSet.getString(9);
+                String fax = resultSet.getString(10);
+                String mail = resultSet.getString(11);
+
+                txtId.setText(id);
+                txtHospitalName.setText(name);
+                txtCity.setText(city);
+                cmbDistricts.setItems(dis);
+                String s = dis.get(0);
+                cmbDistricts.setValue(s);
+                txtCapacity.setText(capacity);
+                txtDirector.setText(director);
+                txtDirectorContact.setText(dirContact);
+                txtHospitalContact1.setText(hosContact1);
+                txtHospitalContact2.setText(hosContact2);
+                txtFax.setText(fax);
+                txtEmail.setText(mail);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Delete Button On Action
     public void btnDelete_OnAction(ActionEvent actionEvent) {
+
     }
 }
