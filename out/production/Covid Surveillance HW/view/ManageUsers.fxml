@@ -17,7 +17,6 @@
       <JFXTextField fx:id="txtContact" labelFloat="true" layoutX="307.0" layoutY="57.0" prefHeight="26.0" prefWidth="278.0" promptText="Enter the contact number" />
       <JFXTextField fx:id="txtUserName" labelFloat="true" layoutX="22.0" layoutY="105.0" prefHeight="26.0" prefWidth="270.0" promptText="Enter the user name" />
       <JFXTextField fx:id="txtEmail" labelFloat="true" layoutX="307.0" layoutY="105.0" prefHeight="26.0" prefWidth="278.0" promptText="Enter the E-mail" />
-      <JFXPasswordField fx:id="txtPassword" labelFloat="true" layoutX="22.0" layoutY="155.0" prefHeight="26.0" prefWidth="270.0" promptText="Enter the password" />
       <JFXComboBox fx:id="cmbUserRole" labelFloat="true" layoutX="307.0" layoutY="155.0" prefHeight="26.0" prefWidth="120.0" promptText="Select User Role" />
       <JFXComboBox fx:id="cmbHospitalOrQC" labelFloat="true" layoutX="431.0" layoutY="155.0" prefHeight="26.0" prefWidth="154.0" promptText="Select Hospital / QC" />
       <JFXButton fx:id="btnSave" layoutX="408.0" layoutY="13.0" onAction="#btnSave_OnAction" prefHeight="26.0" prefWidth="86.0" style="-fx-border-color: black;" text="Save" />
@@ -31,5 +30,6 @@
             <TableColumn prefWidth="116.79998779296875" text="Remove" />
         </columns>
       </TableView>
+      <JFXPasswordField fx:id="txtPassword" labelFloat="true" layoutX="22.0" layoutY="155.0" prefHeight="26.0" prefWidth="270.0" promptText="Enter the password" />
    </children>
 </AnchorPane>
