@@ -12,24 +12,24 @@
    <children>
       <JFXButton layoutX="14.0" layoutY="14.0" onAction="#btnHome_OnAction" style="-fx-border-color: black;" text="Home" />
       <Text layoutX="226.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manage Quarantine Centers" />
-      <JFXTextField labelFloat="true" layoutX="14.0" layoutY="48.0" prefHeight="26.0" prefWidth="146.0" promptText="Search Hospital" />
-      <JFXListView layoutX="14.0" layoutY="76.0" prefHeight="278.0" prefWidth="146.0" />
-      <JFXButton layoutX="14.0" layoutY="354.0" prefHeight="32.0" prefWidth="146.0" style="-fx-border-color: black;" text="+ Add Hospital" />
+      <JFXTextField fx:id="txtSearch" labelFloat="true" layoutX="14.0" layoutY="48.0" prefHeight="26.0" prefWidth="146.0" promptText="Search Hospital" />
+      <JFXListView fx:id="lstQCenters" layoutX="14.0" layoutY="76.0" prefHeight="278.0" prefWidth="146.0" />
+      <JFXButton layoutX="14.0" layoutY="354.0" onAction="#btnAddQc_OnAction" prefHeight="32.0" prefWidth="146.0" style="-fx-border-color: black;" text="+ Add Qurantine Center" />
       <TitledPane animated="false" layoutX="175.0" layoutY="48.0" prefHeight="338.0" prefWidth="410.0" text="Quarantine Center Information">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="301.0" prefWidth="406.0">
                <children>
-                  <JFXTextField labelFloat="true" layoutX="14.0" layoutY="14.0" prefHeight="24.0" prefWidth="173.0" promptText="ID" />
-                  <JFXTextField labelFloat="true" layoutX="206.0" layoutY="14.0" prefHeight="24.0" prefWidth="190.0" promptText="Quarantine Center Name" />
-                  <JFXTextField labelFloat="true" layoutX="207.0" layoutY="67.0" prefHeight="24.0" prefWidth="189.0" promptText="City" />
-                  <JFXComboBox labelFloat="true" layoutX="17.0" layoutY="68.0" prefHeight="22.0" prefWidth="174.0" promptText="District" />
-                  <JFXTextField labelFloat="true" layoutX="17.0" layoutY="114.0" prefHeight="24.0" prefWidth="174.0" promptText="Capacity" />
-                  <JFXTextField labelFloat="true" layoutX="207.0" layoutY="114.0" prefHeight="24.0" prefWidth="190.0" promptText="Head" />
-                  <JFXTextField labelFloat="true" layoutX="17.0" layoutY="170.0" prefHeight="24.0" prefWidth="174.0" promptText="Head Contact No" />
-                  <JFXTextField labelFloat="true" layoutX="207.0" layoutY="170.0" prefHeight="24.0" prefWidth="190.0" promptText="QC Contact No 1" />
-                  <JFXTextField labelFloat="true" layoutX="17.0" layoutY="222.0" prefHeight="24.0" prefWidth="174.0" promptText="QC Contact No 2" />
-                  <JFXButton layoutX="207.0" layoutY="266.0" prefHeight="26.0" prefWidth="84.0" style="-fx-border-color: black;" text="Save" />
-                  <JFXButton layoutX="313.0" layoutY="266.0" prefHeight="26.0" prefWidth="84.0" style="-fx-border-color: black;" text="Delete" />
+                  <JFXTextField fx:id="txtId" editable="false" labelFloat="true" layoutX="14.0" layoutY="14.0" prefHeight="24.0" prefWidth="173.0" promptText="ID" />
+                  <JFXTextField fx:id="txtQcName" labelFloat="true" layoutX="206.0" layoutY="14.0" prefHeight="24.0" prefWidth="190.0" promptText="Quarantine Center Name" />
+                  <JFXTextField fx:id="txtCity" labelFloat="true" layoutX="207.0" layoutY="67.0" prefHeight="24.0" prefWidth="189.0" promptText="City" />
+                  <JFXComboBox fx:id="cmbDistrict" labelFloat="true" layoutX="17.0" layoutY="68.0" prefHeight="22.0" prefWidth="174.0" promptText="District" />
+                  <JFXTextField fx:id="txtCapacity" labelFloat="true" layoutX="17.0" layoutY="114.0" prefHeight="24.0" prefWidth="174.0" promptText="Capacity" />
+                  <JFXTextField fx:id="txtHead" labelFloat="true" layoutX="207.0" layoutY="114.0" prefHeight="24.0" prefWidth="190.0" promptText="Head" />
+                  <JFXTextField fx:id="txtHeadContact" labelFloat="true" layoutX="17.0" layoutY="170.0" prefHeight="24.0" prefWidth="174.0" promptText="Head Contact No" />
+                  <JFXTextField fx:id="txtQcContact" labelFloat="true" layoutX="207.0" layoutY="170.0" prefHeight="24.0" prefWidth="190.0" promptText="QC Contact No 1" />
+                  <JFXTextField fx:id="txtQcContact2" labelFloat="true" layoutX="17.0" layoutY="222.0" prefHeight="24.0" prefWidth="174.0" promptText="QC Contact No 2" />
+                  <JFXButton fx:id="btnSave" layoutX="207.0" layoutY="266.0" onAction="#btnSave_OnAction" prefHeight="26.0" prefWidth="84.0" style="-fx-border-color: black;" text="Save" />
+                  <JFXButton fx:id="btnDelete" layoutX="313.0" layoutY="266.0" onAction="#btnDelete_OnAction" prefHeight="26.0" prefWidth="84.0" style="-fx-border-color: black;" text="Delete" />
                </children>
             </AnchorPane>
          </content>

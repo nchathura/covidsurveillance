@@ -8,14 +8,12 @@ import db.DBConnection;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -57,35 +55,7 @@ public class ManageHospitalController {
 
         getClicked();
 
-        String districtsText =
-                "Colombo\n" +
-                "Gampaha\n" +
-                "Kalutara\n" +
-                "Kandy\n" +
-                "Matale\n" +
-                "Nuwara Eliya\n" +
-                "Galle\n" +
-                "Matara\n" +
-                "Hambantota\n" +
-                "Jaffna\n" +
-                "Mannar\n" +
-                "Vauniya\n" +
-                "Mullativue\n" +
-                "Ampara\n" +
-                "Trincomalee\n" +
-                "Batticaloa\n" +
-                "Kilinochchi\n" +
-                "Kurunegala\n" +
-                "Puttalam\n" +
-                "Anuradhapura\n" +
-                "Polonnaruwa\n" +
-                "Badulla\n" +
-                "Moneragala\n" +
-                "Ratnapura\n" +
-                "Kegalle";
-        String[] districts = districtsText.split("\n");
-        ObservableList<String> olDistricts = FXCollections.observableArrayList(Arrays.asList(districts));
-        cmbDistricts.setItems(olDistricts);
+        ManageQuarantineCentersController.dis(cmbDistricts);
 
         //Disable/Unable Fields
         txtId.setDisable(true);
@@ -273,6 +243,7 @@ public class ManageHospitalController {
         txtHospitalName.setDisable(false);
         cmbDistricts.setDisable(false);
         btnSave.setDisable(false);
+        btnDelete.setDisable(true);
 
         //Clear Fields
         txtEmail.clear();
@@ -426,7 +397,6 @@ public class ManageHospitalController {
                 String name = resultSet.getString(2);
                 String city = resultSet.getString(3);
                 String district = resultSet.getString(4);
-                ObservableList<String> dis = FXCollections.observableArrayList(district);
                 String capacity = resultSet.getString(5);
                 String director = resultSet.getString(6);
                 String dirContact = resultSet.getString(7);
@@ -438,9 +408,7 @@ public class ManageHospitalController {
                 txtId.setText(id);
                 txtHospitalName.setText(name);
                 txtCity.setText(city);
-                cmbDistricts.setItems(dis);
-                String s = dis.get(0);
-                cmbDistricts.setValue(s);
+                cmbDistricts.getSelectionModel().select(district);
                 txtCapacity.setText(capacity);
                 txtDirector.setText(director);
                 txtDirectorContact.setText(dirContact);
