@@ -164,7 +164,7 @@ public class ManageHospitalController {
 
     //Validating Inputs
     //Validate Phone Numbers
-    public void validatePhoneNo (){
+    public boolean validatePhoneNo (){
         String numberFormat= "^\\d{3}[-]\\d{7}$";
         String contact1 = txtHospitalContact1.getText().trim();
         String contact2 = txtHospitalContact2.getText().trim();
@@ -187,10 +187,11 @@ public class ManageHospitalController {
              myAlert.show();
             }
         }
+        return flag3;
     }
 
     //Validate FAX
-    public void validateFax(){
+    public boolean validateFax(){
         String numberFormat= "^\\d{3}[-]\\d{7}$";
         String faxNo = txtFax.getText().trim();
         boolean matches = faxNo.matches(numberFormat);
@@ -199,10 +200,11 @@ public class ManageHospitalController {
             Alert myAlert = new Alert(Alert.AlertType.ERROR, "Enter a correct FAX no: as below \n (057-2345677)");
             myAlert.show();
         }
+        return matches;
     }
 
     //Validate E-mail
-    public void validateEmail () {
+    public boolean validateEmail () {
             String mailFormat = "^[A-Za-z0-9+_.-]+@(.+)$";
             String mail = txtEmail.getText();
 
@@ -211,10 +213,11 @@ public class ManageHospitalController {
             if (!matches) {
                 new Alert(Alert.AlertType.ERROR, "Wrong E-mail address \n Try again!").show();
         }
+        return matches;
     }
 
     //Validate Capacity Text
-    public void validateCapacity (){
+    public boolean validateCapacity (){
         String isNumber= "^[0-9]*$";
         String capacity = txtCapacity.getText().trim();
         boolean matches = capacity.matches(isNumber);
@@ -222,6 +225,7 @@ public class ManageHospitalController {
         if (!matches || capacity.equals("")){
             new Alert(Alert.AlertType.ERROR, "Wrong capacity, try again").show();
         }
+        return matches;
     }
 
     //On Action
@@ -289,32 +293,11 @@ public class ManageHospitalController {
                 e.printStackTrace();
             }
         }
-
-//        String number = txtId.getText().trim();
-//        String newNo = number.replace("H", "");
-//        int no = Integer.parseInt(newNo);
-//
-//        if (no>=1){
-//            String temp = "H00"+(no+1);
-//            txtId.setText(temp);
-//        }
-//        if (no>=9){
-//            String temp = "H0"+(no+1);
-//            txtId.setText(temp);
-//        }
-//        if (no>=99){
-//            String temp = "H"+(no+1);
-//            txtId.setText(temp);
-//        }
     }
 
     //Save Button On Action
     public void btnSave_OnAction(ActionEvent actionEvent) {
-        if (btnSave.getText().equals("Save")) {
-            validatePhoneNo();
-            validateFax();
-            validateEmail();
-            validateCapacity();
+        if (btnSave.getText().equals("Save") && validatePhoneNo() && validateEmail() && validateFax() && validateCapacity()) {
 
             String SQL = "INSERT INTO hospitalInformation VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             try {
@@ -436,11 +419,8 @@ public class ManageHospitalController {
 
     //Update Hospital
     public void updateHospital (){
-        if (btnSave.getText().equals("Update")){
-            validatePhoneNo();
-            validateFax();
-            validateEmail();
-            validateCapacity();
+        if (btnSave.getText().equals("Update") && validatePhoneNo() && validateEmail() && validateFax() && validateCapacity()){
+
             try {
                 PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement
                         ("UPDATE hospitalinformation SET hospitalName=?, city=?, district=?, capacity=?, director=?, directorContact=?, hospitalContact2=?, hospitalContact2=?, hospitalFax=?, hospitalEmail=? WHERE id=?");
