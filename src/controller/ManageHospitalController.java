@@ -345,6 +345,7 @@ public class ManageHospitalController {
                 prStm.setObject(10, fax);
                 prStm.setObject(11, mail);
 
+                lstHospitals.getItems().add(txtHospitalName.getText());
                 int i = prStm.executeUpdate();
                 if (i > 0) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Successfully Saved", ButtonType.OK).show();
@@ -427,6 +428,10 @@ public class ManageHospitalController {
     //Update Hospital
     public void updateHospital (){
         if (btnSave.getText().equals("Update")){
+            validatePhoneNo();
+            validateFax();
+            validateEmail();
+            validateCapacity();
             try {
                 PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement
                         ("UPDATE hospitalinformation SET hospitalName=?, city=?, district=?, capacity=?, director=?, directorContact=?, hospitalContact2=?, hospitalContact2=?, hospitalFax=?, hospitalEmail=? WHERE id=?");
@@ -457,6 +462,7 @@ public class ManageHospitalController {
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         try {
             PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement("DELETE FROM hospitalinformation WHERE id=?");
+            lstHospitals.getItems().remove(txtHospitalName.getText());
 
             prStm.setString(1,txtId.getText());
             int i = prStm.executeUpdate();
