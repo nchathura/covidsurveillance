@@ -9,17 +9,16 @@
 
 <AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #00081e;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
    <children>
-      <AnchorPane layoutY="62.0" />
-      <Text fill="WHITE" layoutX="192.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="COVID Surveillance System">
-         <font>
-            <Font size="19.0" />
-         </font>
-      </Text>
-      <ImageView fitHeight="157.0" fitWidth="299.0" layoutX="278.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="370.0" fitWidth="575.0" layoutX="13.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@asset/giphy.gif" />
          </image>
       </ImageView>
+      <Text fill="WHITE" layoutX="179.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="COVID Surveillance System">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Text>
       <JFXButton fx:id="btnGlobal" layoutX="192.0" layoutY="97.0" onAction="#btnGlobal_OnAction" prefHeight="40.0" prefWidth="215.0" style="-fx-background-color: yellow;" text="Global COVID Controller" textAlignment="CENTER" />
       <JFXButton fx:id="btnHospital" layoutX="192.0" layoutY="167.0" onAction="#btnHospital_OnAction" prefHeight="40.0" prefWidth="215.0" style="-fx-background-color: yellow;" text="Manage Hospitals" textAlignment="CENTER" />
       <JFXButton fx:id="btnQuarantine" layoutX="192.0" layoutY="238.0" onAction="#btnQuarantine_OnAction" prefHeight="40.0" prefWidth="215.0" style="-fx-background-color: yellow;" text="Manage Quarantine Centers" textAlignment="CENTER" />
