@@ -16,8 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -109,7 +107,7 @@ public class ManageQuarantineCentersController {
 
     //Validating Inputs
     //Validate Phone Numbers
-    public void validatePhoneNo (){
+    public boolean validatePhoneNo (){
         String numberFormat= "^\\d{3}[-]\\d{7}$";
         String contact1 = txtQcContact.getText().trim();
         String contact2 = txtQcContact2.getText().trim();
@@ -132,10 +130,11 @@ public class ManageQuarantineCentersController {
                 myAlert.show();
             }
         }
+        return flag3;
     }
 
     //Validate Capacity Text
-    public void validateCapacity (){
+    public boolean validateCapacity (){
         String isNumber= "^[0-9]*$";
         String capacity = txtCapacity.getText().trim();
         boolean matches = capacity.matches(isNumber);
@@ -143,6 +142,7 @@ public class ManageQuarantineCentersController {
         if (!matches || capacity.equals("")){
             new Alert(Alert.AlertType.ERROR, "Wrong capacity, try again").show();
         }
+        return matches;
     }
 
     //Load Qt Centers into listView
@@ -292,7 +292,8 @@ public class ManageQuarantineCentersController {
     }
 
     public void btnSave_OnAction(ActionEvent actionEvent) {
-        if (btnSave.getText().equals("Save")) {
+        validateCapacity();
+        if (btnSave.getText().equals("Save") && validateCapacity() && validatePhoneNo()) {
             try {
                 PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement("INSERT INTO QcInformation VALUES (?,?,?,?,?,?,?,?,?)");
                 prStm.setString(1, txtId.getText());
@@ -306,13 +307,21 @@ public class ManageQuarantineCentersController {
                 prStm.setString(9, txtQcContact2.getText());
                 lstQCenters.getItems().add(txtQcName.getText());
 
-                validateCapacity();
-
-                validatePhoneNo();
                 int i = prStm.executeUpdate();
                 if (i > 0) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Successfully Updated", ButtonType.OK).show();
-
+                    //Disable Fields
+                    txtId.setDisable(true);
+                    txtQcName.setDisable(true);
+                    txtCity.setDisable(true);
+                    txtCapacity.setDisable(true);
+                    txtHead.setDisable(true);
+                    txtHeadContact.setDisable(true);
+                    txtQcContact.setDisable(true);
+                    txtQcContact2.setDisable(true);
+                    cmbDistrict.setDisable(true);
+                    btnDelete.setDisable(true);
+                    btnSave.setDisable(true);
                 }
 
 
@@ -337,7 +346,7 @@ public class ManageQuarantineCentersController {
     }
 
     public void UpdateQc(){
-        if (btnSave.getText().equals("Update")){
+        if (btnSave.getText().equals("Update") && validatePhoneNo() && validateCapacity()){
             try {
                 PreparedStatement prStm = DBConnection.getInstance().getConnection().prepareStatement
                         ("UPDATE qcinformation SET qcName=?, district=?, city=?, capacity=?, head=?, headContact=?, qcContact=?, qcContact2=? WHERE id=?");
@@ -350,10 +359,6 @@ public class ManageQuarantineCentersController {
                 prStm.setObject(7,txtQcContact.getText());
                 prStm.setObject(8,txtQcContact2.getText());
                 prStm.setObject(9,txtId.getText());
-
-                validateCapacity();
-
-                validatePhoneNo();
 
                 int i = prStm.executeUpdate();
                 if (i>0){

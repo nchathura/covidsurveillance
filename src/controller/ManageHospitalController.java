@@ -16,13 +16,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ManageHospitalController {
     public AnchorPane root;
@@ -382,6 +380,17 @@ public class ManageHospitalController {
             btnSave.setDisable(true);
         }
         updateHospital();
+
+        //Clear Fields
+        txtEmail.clear();
+        txtFax.clear();
+        txtHospitalContact1.clear();
+        txtHospitalContact2.clear();
+        txtDirectorContact.clear();
+        txtDirector.clear();
+        txtCity.clear();
+        txtCapacity.clear();
+        txtHospitalName.clear();
     }
 
     //View Hospital Info
@@ -474,5 +483,15 @@ public class ManageHospitalController {
             e.printStackTrace();
             new Alert(Alert.AlertType.CONFIRMATION, "Oops Something went wrong! Try again.", ButtonType.OK).show();
         }
+        //Clear Fields
+        txtEmail.clear();
+        txtFax.clear();
+        txtHospitalContact1.clear();
+        txtHospitalContact2.clear();
+        txtDirectorContact.clear();
+        txtDirector.clear();
+        txtCity.clear();
+        txtCapacity.clear();
+        txtHospitalName.clear();
     }
 }
